@@ -4,8 +4,8 @@
 
 import sys
 
-from schwapp.ethrpc import EthJsonRpc
-from schwapp.htlc.coordclient import CoordinatorClient
+from shwop.ethrpc import EthJsonRpc
+from shwop.htlc.coordclient import CoordinatorClient
 
 
 def main(api_url='http://127.0.0.1:5000/htlc'):

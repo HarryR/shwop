@@ -1,10 +1,10 @@
 {
-  "name": "schwapp",
+  "name": "shwop",
   "version": "1.0.0",
-  "description": "Inter Operability Network",
+  "description": "Shwop Tools",
   "main": "truffle.js",
-  "repository": "https://github.com/HarryR/schwapp.git",
-  "author": "schwapp@midnight-labs.org.com",
+  "repository": "https://github.com/HarryR/shwop.git",
+  "author": "shwop@midnight-labs.org.com",
   "license": "LGPL-3.0+",
   "dependencies": {
     "babel-preset-node6": "^11.0.0",

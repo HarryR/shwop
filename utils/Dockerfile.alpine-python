@@ -16,4 +16,4 @@ COPY utils/.docker-build-requirements.txt /tmp/build-requirements.txt
 RUN /entrypoint.sh -B /tmp/build-requirements.txt -r /tmp/requirements.txt
 RUN rm -f /requirements.installed
 
-ENTRYPOINT ["python3", "-mschwapp"]
+ENTRYPOINT ["python3", "-mshwop"]

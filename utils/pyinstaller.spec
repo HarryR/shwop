@@ -1,4 +1,4 @@
-# Run `pyinstaller schwapp.spec` to generate an executable
+# Run `pyinstaller shwop.spec` to generate an executable
 
 import subprocess, sys
 
@@ -8,7 +8,7 @@ def get_crypto_path():
 
 dict_tree = Tree(get_crypto_path(), prefix='Crypto', excludes=["*.pyc"])
 
-name = 'schwapp'
+name = 'shwop'
 # Generate filename
 #suffix = {'linux2': '-linux', 'win32': '-win', 'darwin': '-osx'}
 #output = name + '-' + subprocess.check_output(['git', 'describe', '--always', '--tags']).decode('ascii').strip() + suffix.get(sys.platform, '')

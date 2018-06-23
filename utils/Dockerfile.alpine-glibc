@@ -1,7 +1,7 @@
 FROM frolvlad/alpine-glibc
 
-COPY dist/schwapp /app/
+COPY dist/shwop /app/
 COPY abi /app/abi/
 WORKDIR /app
 
-ENTRYPOINT ["/app/schwapp"]
+ENTRYPOINT ["/app/shwop"]

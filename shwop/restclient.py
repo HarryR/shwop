@@ -81,5 +81,5 @@ class RestClient(object):
     def PUT(self, **kwargs):
         return self._request('PUT', data=kwargs)
 
-    def DELETE(self, id=None, **kwargs):
+    def DELETE(self, **kwargs):
         return self._request('DELETE', data=kwargs)

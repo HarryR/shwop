@@ -6,7 +6,7 @@ NPM=npm
 GANACHE=$(ROOT_DIR)/node_modules/.bin/ganache-cli
 TRUFFLE=$(ROOT_DIR)/node_modules/.bin/truffle
 
-NAME=schwapp
+NAME=shwop
 DOCKER_TAG_NAME=harryr/$(NAME):latest
 DIST_BINARY=dist/$(NAME)
 
