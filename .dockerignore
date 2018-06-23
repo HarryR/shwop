@@ -1,3 +1,12 @@
+.git
+package-lock.json
+package.json
+truffle.js
+*.md
+.travis.yml
+.solhint.json
+dist/*.egg
+dist/*.whl
 node_modules
 *.egg-info
 build

@@ -6,7 +6,9 @@ NPM=npm
 GANACHE=$(ROOT_DIR)/node_modules/.bin/ganache-cli
 TRUFFLE=$(ROOT_DIR)/node_modules/.bin/truffle
 
-DOCKER_TAG_NAME=harryr/schwapp:latest
+NAME=schwapp
+DOCKER_TAG_NAME=harryr/$(NAME):latest
+DIST_BINARY=dist/$(NAME)
 
 UTIL_IMPORTS=$(ROOT_DIR)/utils/extract-imports.sh
 
@@ -37,8 +39,15 @@ clean:
 #
 # Packaging and distribution
 
-docker-build: dist/schwapp
-	docker build --rm=true -t $(DOCKER_TAG_NAME) -f Dockerfile.alpine-glibc .
+docker-build: docker-build-glibc
+
+# Uses PyInstaller to crate a self-contained executable, packages in Docker file
+docker-build-glibc: $(DIST_BINARY)
+	docker build --rm=true -t $(DOCKER_TAG_NAME) -f utils/Dockerfile.alpine-glibc .
+
+# Uses jfloff/alpine-python image for traditional python installation
+docker-build-python:
+	docker build --rm=true -t $(DOCKER_TAG_NAME) -f utils/Dockerfile.alpine-python .
 
 docker-run:
 	docker run --rm=true -ti $(DOCKER_TAG_NAME) --help
@@ -50,8 +59,8 @@ bdist:
 dist:
 	mkdir -p $@
 
-dist/schwapp: dist
-	$(PYTHON) -mPyInstaller schwapp.spec
+$(DIST_BINARY): utils/pyinstaller.spec dist
+	$(PYTHON) -mPyInstaller --clean -p $(ROOT_DIR) $<
 
 
 #######################################################################
@@ -59,10 +68,10 @@ dist/schwapp: dist
 # Linting and anti-retardery measures
 
 python-pyflakes:
-	$(PYTHON) -mpyflakes schwapp
+	$(PYTHON) -mpyflakes $(NAME)
 
 python-pylint:
-	$(PYTHON) -mpylint -d $(PYLINT_IGNORE) schwapp || true
+	$(PYTHON) -mpylint -d $(PYLINT_IGNORE) $(NAME) || true
 
 python-lint: python-pyflakes python-pylint
 
@@ -144,7 +153,7 @@ travis-testrpc-start: travis-testrpc-stop
 travis-testrpc-stop:
 	if [ -f .testrpc.pid ]; then kill `cat .testrpc.pid` || true; rm -f .testrpc.pid; fi
 
-travis: travis-testrpc-start truffle-deploy-a contracts test
+travis: travis-testrpc-start truffle-deploy-a contracts $(DIST_BINARY) test
 
 
 testrpc-a:
@@ -160,7 +169,7 @@ test-unit:
 	$(PYTHON) -m unittest discover test/
 
 test-coordserver:
-	$(PYTHON) -mschwapp htlc coordinator --contract 0xcfeb869f69431e42cdb54a4f4f105c19c080a601
+	$(PYTHON) -m$(NAME) htlc coordinator --contract 0xcfeb869f69431e42cdb54a4f4f105c19c080a601
 
 test-coordclient:
 	PYTHONPATH=. $(PYTHON) ./test/test_coordclient.py

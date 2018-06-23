@@ -1,3 +1,6 @@
-from ion.__main__ import commands
+from schwapp.__main__ import COMMANDS
+
+# Necessary to fix PyInstaller native library detection bug
 import Crypto.Hash.keccak
-commands.main()
+
+COMMANDS.main()

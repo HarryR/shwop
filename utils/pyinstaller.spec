@@ -15,7 +15,7 @@ name = 'schwapp'
 output = name
 
 # Analyze files
-a = Analysis(['__main__.py'], excludes=[], datas=[])
+a = Analysis(['../__main__.py'], excludes=[], datas=[])
 a.binaries = filter(lambda x: 'Crypto' not in x[0], a.binaries)
 a.datas += dict_tree
 
