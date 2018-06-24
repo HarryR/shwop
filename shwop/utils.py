@@ -74,8 +74,7 @@ def encode_int(v):
 def scan_bin(v):
     if v[:2] in ('0x', b'0x'):
         return decode_hex(v[2:])
-    else:
-        return decode_hex(v)
+    return decode_hex(v)
 
 
 def require(arg, msg=None):

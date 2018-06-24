@@ -31,14 +31,6 @@ contract HTLC {
 
     mapping (bytes32 => Exchange) public exchanges;
 
-    function GetExchange ( bytes32 inExchGUID )
-        internal view returns (Exchange storage)
-    {
-        Exchange storage exch = exchanges[inExchGUID];
-        require( exch.state != ExchangeState.Invalid );
-        return exch;
-    }
-
     function GetSender ( bytes32 inExchGUID )
         public view returns (address)
     {
@@ -148,4 +140,13 @@ contract HTLC {
 
         emit OnRefund(inExchGUID);
     }
+
+    function GetExchange ( bytes32 inExchGUID )
+        internal view returns (Exchange storage)
+    {
+        Exchange storage exch = exchanges[inExchGUID];
+        require(exch.state != ExchangeState.Invalid);
+        return exch;
+    }
+
 }

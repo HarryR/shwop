@@ -1,7 +1,8 @@
 // Copyright (c) 2016-2017 Clearmatics Technologies Ltd
 // SPDX-License-Identifier: LGPL-3.0+
 
-pragma solidity ^0.4.18;
+pragma solidity 0.4.24;
+
 
 contract Migrations {
   address public owner;

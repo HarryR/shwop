@@ -78,6 +78,8 @@ python-lint: python-pyflakes python-pylint
 solidity-lint:
 	$(NPM) run lint
 
+lint: solidity-lint python-lint
+
 
 #######################################################################
 #
@@ -153,7 +155,7 @@ travis-testrpc-start: travis-testrpc-stop
 travis-testrpc-stop:
 	if [ -f .testrpc.pid ]; then kill `cat .testrpc.pid` || true; rm -f .testrpc.pid; fi
 
-travis: travis-testrpc-start truffle-deploy-a contracts $(DIST_BINARY) test
+travis: travis-testrpc-start truffle-deploy-a contracts test $(DIST_BINARY) lint
 
 
 testrpc-a:

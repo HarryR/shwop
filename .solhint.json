@@ -1,7 +1,10 @@
 {
 	"extends": "default",
 	"rules": {
-	 	"func-name-mixedcase": false,
-	 	"not-rely-on-time": false
+		"indent": false,
+		"var-name-mixedcase": false,
+		"func-name-mixedcase": false,
+		"func-param-name-mixedcase": false,
+		"not-rely-on-time": false
 	}
 }
