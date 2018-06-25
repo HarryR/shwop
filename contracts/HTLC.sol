@@ -6,7 +6,7 @@ pragma solidity 0.4.24;
 
 contract HTLC {
 
-    event OnDeposit( bytes32 exchGUID, address indexed receiver, bytes32 secretHashed, uint256 expiry );
+    event OnDeposit( bytes32 exchGUID, address indexed receiver, bytes32 secretHashed, uint256 expiry, uint256 amount );
 
     event OnRefund( bytes32 indexed exchGUID );
 
@@ -98,7 +98,7 @@ contract HTLC {
             ExchangeState.Deposited
         );
 
-        emit OnDeposit( exchGUID, inReceiver, inSecretHashed, inExpiry);
+        emit OnDeposit( exchGUID, inReceiver, inSecretHashed, inExpiry, msg.value);
 
         return exchGUID;
     }
