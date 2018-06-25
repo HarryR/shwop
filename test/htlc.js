@@ -7,12 +7,60 @@ const HTLC = artifacts.require("HTLC");
 
 const crypto = require('crypto');
 
+// current timestamp, as per the latest block
 function now() {
-	return Math.floor(new Date() / 1000);
+	return parseInt(web3.currentProvider.send(
+		{jsonrpc:"2.0", method: "eth_getBlockByNumber", params:["latest", false]}
+	)['result']['timestamp']);
 }
 
-// TODO: deposit
-// TODO: withdraw
+const evm_snapshot = function () {
+	return new Promise((resolve, reject) => {
+		web3.currentProvider.sendAsync({
+			jsonrpc: '2.0',
+			method: 'evm_snapshot',
+			params: []
+		}, err1 => {
+			if (err1) return reject(err1);
+			return resolve();
+		});
+	});
+}
+
+const evm_revert = function () {
+	return new Promise((resolve, reject) => {
+		web3.currentProvider.sendAsync({
+			jsonrpc: '2.0',
+			method: 'evm_revert',
+			params: []
+		}, err1 => {
+			if (err1) return reject(err1);
+			return resolve();
+		});
+	});
+}
+
+
+/** Forces block timestamp to be incremented by `duration`
+    e.g. when testing timeout or expiry */
+const increaseTime = function (duration) {
+	return new Promise((resolve, reject) => {
+		web3.currentProvider.sendAsync({
+			jsonrpc: '2.0',
+			method: 'evm_increaseTime',
+			params: [duration]
+		}, err1 => {
+			if (err1) return reject(err1);
+			web3.currentProvider.sendAsync({
+				jsonrpc: '2.0',
+				method: 'evm_mine'
+			}, (err2, res) => {
+				return err2 ? reject(err2) : resolve(res);
+			});
+		});
+	});
+}
+
 
 contract('HTLC', (accounts) => {
 
@@ -47,7 +95,6 @@ contract('HTLC', (accounts) => {
 
 		// Perform deposit
 		const tx_deposit = await htlc.Deposit(deposit_receiver, secretHashed_hex, deposit_expiry, {from: accounts[0], value: deposit_amount});
-		
 		const deposit_event = tx_deposit.logs[0];
 
 		// Verify state is deposited
@@ -60,7 +107,16 @@ contract('HTLC', (accounts) => {
 		assert.equal( deposit_event.args.expiry, deposit_expiry );
 		assert.equal( deposit_event.args.receiver, deposit_receiver );
 		assert.equal( deposit_event.args.amount, deposit_amount );
-		
+
+		// Verify duplicate deposit will throw
+		try {
+			console.log("Testing duplicate deposit");
+			const tx_deposit_duplicate = await htlc.Deposit(deposit_receiver, secretHashed_hex, deposit_expiry, {from: accounts[0], value: deposit_amount});
+		}
+		catch (error) {
+			assert((error + "").indexOf("revert") >= 0);
+		}
+
 		// Then withdraw from the receivers account
 		const tx_withdraw = await htlc.Withdraw(exch_guid, secret_hex, {from: deposit_receiver});
 		const withdraw_event = tx_withdraw.logs[0];
